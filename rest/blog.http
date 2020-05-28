@@ -1,3 +1,6 @@
 
 ##
-GET http://localhost:3000/api/devops/blog
+POST http://localhost:3000/api/devops/blog/upload HTTP/1.1
+content-type: application/gzip
+
+< ./public.tar.gz
