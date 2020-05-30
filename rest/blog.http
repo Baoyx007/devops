@@ -1,6 +1,19 @@
 
+
+# @hostname = gcloud.byx123.tk 
+@hostname = localhost
+# @port = 8070
+@port = 3000
+@host = {{hostname}}:{{port}}
+
 ##
-POST http://localhost:3000/api/devops/blog/upload HTTP/1.1
+POST http://{{host}}/api/devops/blog/upload HTTP/1.1
 content-type: application/gzip
 
 < ./public.tar.gz
+
+
+# curl --request POST \
+#   --url http://localhost:3000/api/devops/blog/upload \
+#   --header 'content-type: application/gzip' \
+#   --data @./public.tar.gz

@@ -3,6 +3,7 @@ import { AppService } from './app.service';
 import { Request } from 'express';
 import { createGunzip } from 'zlib';
 import * as tar from 'tar-fs';
+import { pipeline } from 'stream';
 
 @Controller('/api/devops')
 export class AppController {
@@ -16,13 +17,19 @@ export class AppController {
     // });
 
     return new Promise((resolve, reject) => {
-      req
-        .pipe(createGunzip())
-        .pipe(tar.extract(process.env.BLOG_LOCATION, {}))
-        .on('finish', () => {
+      pipeline(
+        req,
+        createGunzip(),
+        tar.extract(process.env.BLOG_LOCATION),
+        err => {
+          if (err) {
+            console.error(err);
+            reject('error');
+          }
           resolve('Done');
           console.log('Done');
-        });
+        },
+      );
     });
   }
 }
