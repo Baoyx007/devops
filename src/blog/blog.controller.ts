@@ -1,4 +1,4 @@
-import { Controller, Post, Req } from '@nestjs/common';
+import { Controller, Post, Req, Logger, Inject } from '@nestjs/common';
 import { pipeline } from 'stream';
 import { createGunzip } from 'zlib';
 import { Request } from 'express';
@@ -6,6 +6,8 @@ import * as tar from 'tar-fs';
 
 @Controller('/blog')
 export class BlogController {
+  private logger: Logger = new Logger(BlogController.name);
+
   @Post('/upload')
   recvUploadBlog(@Req() req: Request) {
     return new Promise((resolve, reject) => {
@@ -15,11 +17,11 @@ export class BlogController {
         tar.extract(process.env.BLOG_LOCATION),
         err => {
           if (err) {
-            console.error(err);
+            this.logger.error(err);
             reject('error');
           }
+          this.logger.log('Done upload blog');
           resolve('Done');
-          console.log('Done');
         },
       );
     });
