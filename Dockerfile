@@ -8,6 +8,8 @@ RUN yarn build
 
 FROM node:lts-alpine
 WORKDIR /app
+VOLUME /data
+ENV BLOG_LOCATION /data
+ENV PORT 8070
 COPY --from=builder /app ./
-EXPOSE 3000
 CMD ["yarn", "start:prod"]
